@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 개원의 정석 데일리 브리핑
 
-## Getting Started
+『개원의 정석』 카카오톡 단톡방(개원의 정석 ver2.0)에 매일 아침 공유할 데일리 브리핑 웹페이지.
 
-First, run the development server:
+## 로컬에서 실행
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 에서 확인.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 콘텐츠 구성
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| 섹션 | 데이터 소스 | 비고 |
+|---|---|---|
+| 오늘의 한마디 | `src/lib/data/quotes.json` | 날짜 기반 로테이션. 문구는 이 파일에서 직접 추가/수정 가능 |
+| 이번 주 날씨 | 기상청 공공데이터포털 API | **`KMA_SERVICE_KEY` 환경변수 필요** (아래 참고) |
+| 원/달러 환율 | open.er-api.com (무료, 키 불필요) | 1시간마다 갱신 |
+| 코스피 / 나스닥 | Yahoo Finance 비공식 엔드포인트 | 공식 API 아님 — 추후 불안정해지면 대체 필요. 완전 자동, 키 불필요 |
+| 비트코인(USD) | CoinGecko 무료 API | 15분마다 갱신, 키 불필요 |
+| 세무·행정 마감일 | `src/lib/taxDeadlines.ts` | 개인사업자(의원) 기준 대표 일정. 법인/성실신고 대상자는 로직 조정 필요 |
+| 의료계 소식 | 청년의사·메디칼업저버 RSS | 다른 매체 추가는 `src/lib/medNews.ts`의 `FEEDS` 배열 수정 |
+| 최신 해외 의학저널 | PubMed E-utilities (무료, 키 불필요) | NEJM·JAMA·Lancet·Ann Intern Med·BMJ 최근 30일 RCT/메타분석/체계적 문헌고찰 등. **의도적으로 LLM 요약 없음** — 광고 외 수익원이 없어 LLM API 비용을 감당할 방법이 없고, 개원의 독자는 원문 제목만으로도 판단 가능하다는 것이 운영자 결정. 제목·저널·링크만 제공 |
+| 방장 공지 | `src/lib/data/notice.json` | 아래 "공지 수정 방법" 참고 |
 
-## Learn More
+## 공지 수정 방법
 
-To learn more about Next.js, take a look at the following resources:
+`src/lib/data/notice.json` 파일을 열어 `message`(본문)와 `title`을 원하는 내용으로 바꾸고 저장하면 됩니다.
+공지를 끄고 싶으면 `enabled`을 `false`로 바꾸면 배너 자체가 사라집니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```json
+{
+  "enabled": true,
+  "title": "방장 공지",
+  "message": "이번 주 토요일 저녁 7시, 개원의 정석 와인 모임이 있습니다...",
+  "updatedAt": "2026-07-22"
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+로컬에서 수정 후 배포(git push)하면 반영됩니다. 매번 코드를 다시 배포해야 하는 점이 번거로우면,
+추후 로그인 후 웹에서 바로 수정할 수 있는 관리자 화면(+ 데이터베이스)을 추가하는 것도 가능합니다.
 
-## Deploy on Vercel
+## 날씨 API 키 발급 (필수)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. [공공데이터포털](https://www.data.go.kr) 회원가입
+2. "기상청_단기예보 조회서비스", "기상청_중기예보 조회서비스" 각각 활용신청 (즉시 승인)
+3. 발급된 서비스키(인코딩 키)를 `.env.local` 파일에 등록:
+   ```
+   KMA_SERVICE_KEY=발급받은키
+   ```
+   (`.env.local.example` 파일 참고)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+키가 없으면 날씨 섹션에 설정 안내 배너가 표시되고 나머지 콘텐츠는 정상 노출됩니다.
+
+## 배포 및 매일 공유 방법
+
+1. Vercel(무료)에 배포 — GitHub 저장소 연결 후 자동 배포, `KMA_SERVICE_KEY`는 Vercel 프로젝트 환경변수에 등록
+2. 콘텐츠는 페이지 요청 시 서버에서 자동 갱신됨 (30분 캐시)
+3. 매일 아침 운영진이 배포된 링크(예: `https://xxx.vercel.app`)를 카카오톡 단톡방에 직접 공유
+
+카카오톡에는 공식 봇 API가 없어 자동 게시는 지원하지 않으며, 링크 공유는 수동으로 진행합니다.
+
+## 애드센스
+
+푸터 위 "광고 영역" 자리(`src/app/page.tsx`)에 애드센스 스크립트/유닛을 삽입하세요. 신청 전 콘텐츠를 며칠~몇 주 축적해두는 것을 권장하며, 클릭을 유도하는 문구는 정책 위반이므로 넣지 않습니다.
