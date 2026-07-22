@@ -8,6 +8,7 @@ import { getTodayQuote } from "@/lib/quotes";
 import { getMedicalNews } from "@/lib/medNews";
 import { getMedicalJournalReview } from "@/lib/pubmedReview";
 import { getNotice } from "@/lib/notice";
+import { kstNow } from "@/lib/kst";
 
 // 이 페이지는 정적 export로 빌드된다(GitHub Pages는 서버 런타임이 없음).
 // 따라서 여기서의 데이터 최신화는 요청 시점이 아니라 GitHub Actions가
@@ -16,8 +17,11 @@ import { getNotice } from "@/lib/notice";
 
 const WEEKDAY_KR = ["일", "월", "화", "수", "목", "금", "토"];
 
+// d는 kstNow()로 만든 값이라는 전제 하에 getUTC*()로만 읽어야 KST 기준 날짜가 나온다.
 function formatToday(d: Date) {
-  return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${WEEKDAY_KR[d.getDay()]})`;
+  return `${d.getUTCFullYear()}년 ${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 (${
+    WEEKDAY_KR[d.getUTCDay()]
+  })`;
 }
 
 function formatSigned(n: number, digits = 2) {
@@ -26,7 +30,7 @@ function formatSigned(n: number, digits = 2) {
 }
 
 export default async function Home() {
-  const today = new Date();
+  const today = kstNow();
 
   const [fx, kospi, nasdaq, bitcoin, weather, news, journalReview] = await Promise.all([
     getUsdKrw(),
@@ -261,7 +265,7 @@ export default async function Home() {
 
       <footer className="text-center text-[11px] leading-relaxed text-slate-400">
         <p>정성웅 · 서울W내과 대표원장 · 『개원의 정석』 저자</p>
-        <p className="mt-1">© {today.getFullYear()} 개원의 정석 ver2.0</p>
+        <p className="mt-1">© {today.getUTCFullYear()} 개원의 정석 ver2.0</p>
       </footer>
     </main>
   );

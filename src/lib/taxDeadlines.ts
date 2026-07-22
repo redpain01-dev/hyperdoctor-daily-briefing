@@ -1,3 +1,5 @@
+import { kstNow } from "./kst";
+
 export interface TaxDeadline {
   name: string;
   date: string; // yyyy-MM-dd
@@ -24,38 +26,41 @@ const RECURRING_DEADLINES: RecurringDeadline[] = [
   { name: "부가가치세 2기 확정신고·납부", monthly: false, month: 1, day: 25, description: "7~12월분 부가세 확정신고·납부 (개인 일반과세자)" },
 ];
 
-function stripTime(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+// today는 kstNow()로 만든 값이라는 전제 하에, 전부 getUTC*()/Date.UTC()로만 다뤄야
+// 빌드 서버의 로컬 타임존(보통 UTC)과 무관하게 KST 기준 날짜로 계산된다.
+function stripTime(d: Date): number {
+  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
 }
 
-function nextOccurrence(today: Date, rd: RecurringDeadline): Date {
+function nextOccurrence(today: Date, rd: RecurringDeadline): number {
   const todayMidnight = stripTime(today);
   if (rd.monthly) {
-    const candidate = new Date(today.getFullYear(), today.getMonth(), rd.day);
-    if (candidate < todayMidnight) candidate.setMonth(candidate.getMonth() + 1);
+    let candidate = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), rd.day);
+    if (candidate < todayMidnight) {
+      candidate = Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, rd.day);
+    }
     return candidate;
   }
   const monthIndex = rd.month - 1; // 0-indexed
-  const thisYear = new Date(today.getFullYear(), monthIndex, rd.day);
+  const thisYear = Date.UTC(today.getUTCFullYear(), monthIndex, rd.day);
   if (thisYear >= todayMidnight) return thisYear;
-  return new Date(today.getFullYear() + 1, monthIndex, rd.day);
+  return Date.UTC(today.getUTCFullYear() + 1, monthIndex, rd.day);
 }
 
-function fmt(d: Date) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
-    d.getDate()
+function fmt(ms: number): string {
+  const d = new Date(ms);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(
+    d.getUTCDate()
   ).padStart(2, "0")}`;
 }
 
-export function getUpcomingDeadlines(today: Date = new Date(), limit = 5): TaxDeadline[] {
+export function getUpcomingDeadlines(today: Date = kstNow(), limit = 5): TaxDeadline[] {
   const todayMidnight = stripTime(today);
 
   const list = RECURRING_DEADLINES.map((rd) => {
-    const date = nextOccurrence(today, rd);
-    const dday = Math.round(
-      (stripTime(date).getTime() - todayMidnight.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    return { name: rd.name, date: fmt(date), dday, description: rd.description };
+    const dateMs = nextOccurrence(today, rd);
+    const dday = Math.round((dateMs - todayMidnight) / (1000 * 60 * 60 * 24));
+    return { name: rd.name, date: fmt(dateMs), dday, description: rd.description };
   });
 
   return list.sort((a, b) => a.dday - b.dday).slice(0, limit);

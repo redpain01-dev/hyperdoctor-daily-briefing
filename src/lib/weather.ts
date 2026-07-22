@@ -229,7 +229,9 @@ export async function getWeeklyWeather(): Promise<DailyWeather[] | null> {
     const sorted = Array.from(merged.values()).sort((a, b) => a.date.localeCompare(b.date));
 
     return sorted.slice(0, 7).map((d, i) => {
-      const dow = WEEKDAY[new Date(`${d.date}T00:00:00+09:00`).getDay()];
+      // +09:00 오프셋으로 절대시각을 고정한 뒤 getUTCDay()로 읽어야 빌드 서버의
+      // 로컬 타임존(보통 UTC)과 무관하게 항상 KST 기준 요일이 나온다.
+      const dow = WEEKDAY[new Date(`${d.date}T00:00:00+09:00`).getUTCDay()];
       const label = i === 0 ? "오늘" : i === 1 ? "내일" : `${dow}`;
       return { ...d, label };
     });
