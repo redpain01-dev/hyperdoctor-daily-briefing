@@ -9,7 +9,10 @@ import { getMedicalNews } from "@/lib/medNews";
 import { getMedicalJournalReview } from "@/lib/pubmedReview";
 import { getNotice } from "@/lib/notice";
 
-export const revalidate = 1800;
+// 이 페이지는 정적 export로 빌드된다(GitHub Pages는 서버 런타임이 없음).
+// 따라서 여기서의 데이터 최신화는 요청 시점이 아니라 GitHub Actions가
+// 매일 새벽 이 사이트를 다시 빌드·배포하는 방식으로 이루어진다.
+// (.github/workflows/deploy.yml 참고)
 
 const WEEKDAY_KR = ["일", "월", "화", "수", "목", "금", "토"];
 

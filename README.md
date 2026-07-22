@@ -39,8 +39,9 @@ http://localhost:3000 에서 확인.
 }
 ```
 
-로컬에서 수정 후 배포(git push)하면 반영됩니다. 매번 코드를 다시 배포해야 하는 점이 번거로우면,
-추후 로그인 후 웹에서 바로 수정할 수 있는 관리자 화면(+ 데이터베이스)을 추가하는 것도 가능합니다.
+**터미널 없이도 수정 가능**: GitHub 저장소의 `src/lib/data/notice.json` 파일을 웹 브라우저에서
+열어 연필(✏️) 아이콘으로 바로 수정 → 우측 상단 "Commit changes"만 누르면 됩니다. push가 감지되면
+아래 GitHub Actions가 자동으로 사이트를 다시 빌드해 반영합니다 (몇 분 소요).
 
 ## 날씨 API 키 발급 (필수)
 
@@ -54,13 +55,38 @@ http://localhost:3000 에서 확인.
 
 키가 없으면 날씨 섹션에 설정 안내 배너가 표시되고 나머지 콘텐츠는 정상 노출됩니다.
 
-## 배포 및 매일 공유 방법
+`.env.local`은 로컬 개발용입니다. 실제 배포(GitHub Pages)에는 아래 "배포" 섹션의 GitHub
+Actions Secrets에 **별도로 한 번 더** 등록해야 합니다.
 
-1. Vercel(무료)에 배포 — GitHub 저장소 연결 후 자동 배포, `KMA_SERVICE_KEY`는 Vercel 프로젝트 환경변수에 등록
-2. 콘텐츠는 페이지 요청 시 서버에서 자동 갱신됨 (30분 캐시)
-3. 매일 아침 운영진이 배포된 링크(예: `https://xxx.vercel.app`)를 카카오톡 단톡방에 직접 공유
+## 배포 (GitHub Pages)
 
-카카오톡에는 공식 봇 API가 없어 자동 게시는 지원하지 않으며, 링크 공유는 수동으로 진행합니다.
+이 프로젝트는 Next.js를 **정적 사이트로 export**해서 GitHub Pages에 올리는 방식으로 배포합니다.
+서버가 없는 방식이라 콘텐츠는 "요청 시 자동 갱신"이 아니라, `.github/workflows/deploy.yml`이
+**매일 새벽(KST 05:30) 자동으로 사이트를 다시 빌드·배포**하면서 그 시점 데이터로 새로 구워집니다.
+main 브랜치에 push가 될 때도 즉시 재배포됩니다.
+
+### 최초 설정 (한 번만)
+
+1. GitHub에서 새 저장소 생성 (Settings 아님, github.com 우측 상단 "New repository". README로 초기화하지 않기)
+2. 로컬에서 원격 연결 후 push:
+   ```bash
+   cd ~/Desktop/hyperdoctor-dailycardnews
+   git remote add origin https://github.com/<사용자명>/<저장소명>.git
+   git branch -M main
+   git push -u origin main
+   ```
+3. 저장소 **Settings → Secrets and variables → Actions → New repository secret**에서
+   `KMA_SERVICE_KEY` 이름으로 발급받은 기상청 키 등록 (빌드 시점에 필요)
+4. 저장소 **Settings → Pages → Build and deployment → Source**를 **"GitHub Actions"**로 설정
+5. 저장소 **Actions** 탭 → "Deploy to GitHub Pages" 워크플로 → **Run workflow**로 최초 1회 수동 실행
+6. 완료되면 `https://<사용자명>.github.io/<저장소명>/` 에서 확인 가능
+
+이후로는 push하거나 매일 새벽 자동으로 재배포되므로 별도 조작이 필요 없습니다.
+
+### 매일 공유 방법
+
+매일 아침 운영진이 배포된 링크를 카카오톡 단톡방에 직접 공유합니다. 카카오톡에는 공식 봇 API가
+없어 자동 게시는 지원하지 않습니다.
 
 ## 애드센스
 
