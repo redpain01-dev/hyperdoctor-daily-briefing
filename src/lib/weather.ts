@@ -5,9 +5,22 @@ export interface DailyWeather {
   date: string; // yyyy-MM-dd
   label: string; // 오늘/내일/모레/요일
   skyText: string;
+  icon: string; // skyText를 매핑한 이모지
   tmin: number | null;
   tmax: number | null;
   pop: number | null; // 강수확률(%)
+}
+
+// 기상청 API는 아이콘/이미지를 주지 않고 텍스트만 준다. 이 함수로 텍스트를 이모지로
+// 매핑해서 직관적으로 보이게 한다 (외부 API와 무관하게 우리가 직접 그리는 부분).
+function skyTextToIcon(text: string): string {
+  if (text.includes("눈")) return "❄️";
+  if (text.includes("소나기")) return "🌦️";
+  if (text.includes("비")) return "🌧️";
+  if (text.includes("흐림") || text.includes("흐리고")) return "☁️";
+  if (text.includes("구름많음")) return "⛅";
+  if (text.includes("맑음")) return "☀️";
+  return "🌡️";
 }
 
 const SEOUL_NX = 60;
@@ -219,7 +232,7 @@ export async function getWeeklyWeather(): Promise<DailyWeather[] | null> {
     // 단기예보의 마지막 경계일은 TMX/TMN(최고/최저기온)이 비어있는 경우가 있어, 그 날은
     // 중기예보 쪽이 더 완전하다. 그래서 중기예보를 기본으로 깔고, 단기예보는 기온 데이터가
     // 실제로 채워져 있을 때만 덮어쓴다.
-    const merged = new Map<string, Omit<DailyWeather, "label">>();
+    const merged = new Map<string, Omit<DailyWeather, "label" | "icon">>();
     for (const d of midTerm) merged.set(d.date, d);
     for (const d of shortTerm) {
       const existing = merged.get(d.date);
@@ -233,7 +246,7 @@ export async function getWeeklyWeather(): Promise<DailyWeather[] | null> {
       // 로컬 타임존(보통 UTC)과 무관하게 항상 KST 기준 요일이 나온다.
       const dow = WEEKDAY[new Date(`${d.date}T00:00:00+09:00`).getUTCDay()];
       const label = i === 0 ? "오늘" : i === 1 ? "내일" : `${dow}`;
-      return { ...d, label };
+      return { ...d, label, icon: skyTextToIcon(d.skyText) };
     });
   } catch {
     return null;

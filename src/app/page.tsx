@@ -77,6 +77,7 @@ export default async function Home() {
                 className="flex min-w-[64px] flex-col items-center rounded-xl bg-slate-50 px-2 py-3"
               >
                 <span className="text-xs font-semibold text-slate-500">{d.label}</span>
+                <span className="mt-1 text-2xl leading-none">{d.icon}</span>
                 <span className="mt-1 text-xs text-slate-600">{d.skyText}</span>
                 <span className="mt-2 text-xs text-blue-500">
                   {d.pop !== null ? `${d.pop}%` : "-"}
@@ -255,6 +256,16 @@ export default async function Home() {
           <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-slate-700">
             {notice.message}
           </p>
+          {notice.linkUrl && (
+            <a
+              href={notice.linkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-block rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white"
+            >
+              {notice.linkLabel} →
+            </a>
+          )}
         </section>
       )}
 
