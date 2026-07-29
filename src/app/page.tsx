@@ -8,6 +8,7 @@ import { getTodayQuote } from "@/lib/quotes";
 import { getMedicalNews } from "@/lib/medNews";
 import { getMedicalJournalReview } from "@/lib/pubmedReview";
 import { getNotice } from "@/lib/notice";
+import { getDailyEnglishPhrase } from "@/lib/dailyEnglishPhrase";
 import { kstNow } from "@/lib/kst";
 
 // 이 페이지는 정적 export로 빌드된다(GitHub Pages는 서버 런타임이 없음).
@@ -43,6 +44,7 @@ export default async function Home() {
   ]);
   const deadlines = getUpcomingDeadlines(today);
   const quote = getTodayQuote(today);
+  const dailyPhrase = getDailyEnglishPhrase(today);
   const notice = getNotice();
 
   return (
@@ -247,6 +249,30 @@ export default async function Home() {
           * NEJM·JAMA·Lancet·Ann Intern Med·BMJ 최근 게재 논문 제목입니다. 요약이 아닌 원문
           링크이므로 임상 판단 시 원문을 직접 확인해주세요.
         </p>
+      </section>
+
+      {/* 오늘의 진료영어 한마디 — Hyperdoctor Rapport(진료 영어 스피킹 앱) 연동.
+          이 문장은 src/lib/dailyEnglishPhrase.ts에 있는데, Rapport 쪽
+          src/lib/data/daily.ts의 DAILY_ADVANCED_ITEMS를 그대로 복사한 것 +
+          동일한 날짜 순번 로직이라 매일 Rapport와 같은 문장이 뜬다.
+          (정적 export라 매일 새벽 리빌드될 때 그날의 문장으로 고정 반영됨.) */}
+      <section className="mb-5 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-slate-700">🗣️ 오늘의 진료영어 한마디</h2>
+          <span className="text-[11px] text-slate-400">{dailyPhrase.fieldKo}</span>
+        </div>
+        <p className="mt-2 text-sm font-medium leading-relaxed text-slate-800">
+          {dailyPhrase.en}
+        </p>
+        <p className="mt-1.5 text-xs leading-relaxed text-slate-500">{dailyPhrase.ko}</p>
+        <a
+          href="https://english.hyperdoctor.app/daily"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white"
+        >
+          Rapport에서 듣고 따라 말하기 →
+        </a>
       </section>
 
       {/* 방장 공지 */}
