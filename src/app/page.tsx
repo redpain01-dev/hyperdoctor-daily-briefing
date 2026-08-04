@@ -6,7 +6,7 @@ import { getWeeklyWeather } from "@/lib/weather";
 import { getUpcomingDeadlines } from "@/lib/taxDeadlines";
 import { getTodayQuote } from "@/lib/quotes";
 import { getMedicalNews } from "@/lib/medNews";
-import { getMedicalJournalReview } from "@/lib/pubmedReview";
+import { getMedicalJournalReview, type JournalArticle } from "@/lib/pubmedReview";
 import { getNotice } from "@/lib/notice";
 import { getDailyEnglishPhrase } from "@/lib/dailyEnglishPhrase";
 import { kstNow } from "@/lib/kst";
@@ -18,6 +18,27 @@ import { kstNow } from "@/lib/kst";
 
 const WEEKDAY_KR = ["일", "월", "화", "수", "목", "금", "토"];
 const MEDILOG_URL = "https://medilog.hyperdoctor.app/";
+const JOURNAL_PREVIEW_COUNT = 3;
+
+function JournalArticleItem({ item }: { item: JournalArticle }) {
+  return (
+    <li>
+      <a href={item.link} target="_blank" rel="noopener noreferrer" className="group/article block">
+        <p className="text-sm font-medium leading-snug text-slate-800 transition-colors group-hover/article:text-blue-600">
+          {item.title}
+        </p>
+        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-400">
+          <span>{item.journal}</span>
+          <span aria-hidden="true">·</span>
+          <span>{item.pubdate}</span>
+          <span className="rounded-full bg-blue-50 px-2 py-0.5 font-medium text-blue-600">
+            {item.studyType}
+          </span>
+        </div>
+      </a>
+    </li>
+  );
+}
 
 // d는 kstNow()로 만든 값이라는 전제 하에 getUTC*()로만 읽어야 KST 기준 날짜가 나온다.
 function formatToday(d: Date) {
@@ -320,33 +341,50 @@ export default async function Home() {
 
       {/* 최신 의학저널 리뷰 */}
       <section className="mb-5 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">📚 최신 해외 의학저널</h2>
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="text-sm font-semibold text-slate-700">📚 최신 해외 의학저널</h2>
+          {journalReview.length > 0 && (
+            <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+              오늘 {journalReview.length}편
+            </span>
+          )}
+        </div>
         {journalReview.length > 0 ? (
-          <ul className="space-y-3">
-            {journalReview.map((item) => (
-              <li key={item.pmid}>
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <p className="text-sm font-medium leading-snug text-slate-800 hover:text-blue-600">
-                    {item.title}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-slate-400">
-                    {item.journal} · {item.pubdate}
-                  </p>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="space-y-3">
+              {journalReview.slice(0, JOURNAL_PREVIEW_COUNT).map((item) => (
+                <JournalArticleItem key={item.pmid} item={item} />
+              ))}
+            </ul>
+            {journalReview.length > JOURNAL_PREVIEW_COUNT && (
+              <details className="group mt-3 border-t border-slate-100 pt-3">
+                <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 [&::-webkit-details-marker]:hidden">
+                  <span className="group-open:hidden">
+                    나머지 {journalReview.length - JOURNAL_PREVIEW_COUNT}편 펼쳐보기
+                  </span>
+                  <span className="hidden group-open:inline">논문 목록 접기</span>
+                  <span
+                    aria-hidden="true"
+                    className="inline-block transition-transform duration-200 group-open:rotate-180"
+                  >
+                    ▾
+                  </span>
+                </summary>
+                <ul className="mt-3 space-y-3">
+                  {journalReview.slice(JOURNAL_PREVIEW_COUNT).map((item) => (
+                    <JournalArticleItem key={item.pmid} item={item} />
+                  ))}
+                </ul>
+              </details>
+            )}
+          </>
         ) : (
           <p className="text-xs text-slate-400">오늘의 저널 리뷰를 불러오지 못했습니다.</p>
         )}
         <p className="mt-3 text-[11px] leading-relaxed text-slate-400">
-          * NEJM·JAMA·Lancet·Ann Intern Med·BMJ 최근 게재 논문 제목입니다. 요약이 아닌 원문
-          링크이므로 임상 판단 시 원문을 직접 확인해주세요.
+          * 종합·내과·심혈관·호흡기·소화기·종양·신경·신장 등 주요 저널의 최근 논문 중 초록이
+          있는 연구를 PubMed에서 선별합니다. 매일 일부 항목이 바뀌며, 임상 판단 시 원문을 직접
+          확인해주세요.
         </p>
       </section>
 
