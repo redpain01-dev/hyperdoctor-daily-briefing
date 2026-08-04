@@ -17,6 +17,7 @@ import { kstNow } from "@/lib/kst";
 // (.github/workflows/deploy.yml 참고)
 
 const WEEKDAY_KR = ["일", "월", "화", "수", "목", "금", "토"];
+const MEDILOG_URL = "https://medilog.hyperdoctor.app/";
 
 // d는 kstNow()로 만든 값이라는 전제 하에 getUTC*()로만 읽어야 KST 기준 날짜가 나온다.
 function formatToday(d: Date) {
@@ -28,6 +29,34 @@ function formatToday(d: Date) {
 function formatSigned(n: number, digits = 2) {
   const sign = n > 0 ? "+" : n < 0 ? "" : "";
   return `${sign}${n.toFixed(digits)}`;
+}
+
+function formatDateKey(year: number, monthIndex: number, day: number) {
+  return `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function getMonthCalendar(today: Date) {
+  const year = today.getUTCFullYear();
+  const monthIndex = today.getUTCMonth();
+  const todayKey = formatDateKey(year, monthIndex, today.getUTCDate());
+  const firstWeekday = new Date(Date.UTC(year, monthIndex, 1)).getUTCDay();
+  const daysInMonth = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+  const cellCount = Math.ceil((firstWeekday + daysInMonth) / 7) * 7;
+
+  return {
+    year,
+    month: monthIndex + 1,
+    todayKey,
+    cells: Array.from({ length: cellCount }, (_, index) => {
+      const day = index - firstWeekday + 1;
+      if (day < 1 || day > daysInMonth) return null;
+      return {
+        day,
+        weekday: index % 7,
+        dateKey: formatDateKey(year, monthIndex, day),
+      };
+    }),
+  };
 }
 
 export default async function Home() {
@@ -46,6 +75,7 @@ export default async function Home() {
   const quote = getTodayQuote(today);
   const dailyPhrase = getDailyEnglishPhrase(today);
   const notice = getNotice();
+  const calendar = getMonthCalendar(today);
 
   return (
     <main className="mx-auto w-full max-w-md flex-1 px-4 pb-16 pt-8">
@@ -168,6 +198,68 @@ export default async function Home() {
             )}
           </div>
         </div>
+      </section>
+
+      {/* MediLog 월간 다이어리 */}
+      <section className="mb-5 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-700">📓 MediLog 월간 다이어리</h2>
+            <p className="mt-1 text-[11px] leading-relaxed text-slate-400">
+              날짜를 누르면 메디로그의 해당 날짜 기록장이 바로 열립니다.
+            </p>
+          </div>
+          <span className="shrink-0 rounded-full bg-teal-50 px-2.5 py-1 text-[10px] font-semibold text-teal-700">
+            {calendar.year}.{String(calendar.month).padStart(2, "0")}
+          </span>
+        </div>
+
+        <div className="mt-4 grid grid-cols-7 text-center text-[10px] font-semibold text-slate-400">
+          {WEEKDAY_KR.map((weekday, index) => (
+            <span
+              key={weekday}
+              className={index === 0 ? "text-red-400" : index === 6 ? "text-blue-400" : ""}
+            >
+              {weekday}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-2 grid grid-cols-7 gap-1">
+          {calendar.cells.map((cell, index) =>
+            cell ? (
+              <a
+                key={cell.dateKey}
+                href={`${MEDILOG_URL}?date=${cell.dateKey}&view=day&utm_source=daily-briefing&utm_medium=calendar`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${calendar.month}월 ${cell.day}일 메디로그 기록장 열기`}
+                className={`flex h-9 items-center justify-center rounded-lg text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 ${
+                  cell.dateKey === calendar.todayKey
+                    ? "bg-teal-700 text-white shadow-sm"
+                    : cell.weekday === 0
+                      ? "text-red-500 hover:bg-red-50"
+                      : cell.weekday === 6
+                        ? "text-blue-500 hover:bg-blue-50"
+                        : "text-slate-600 hover:bg-teal-50 hover:text-teal-700"
+                }`}
+              >
+                {cell.day}
+              </a>
+            ) : (
+              <span key={`empty-${index}`} aria-hidden="true" className="h-9" />
+            )
+          )}
+        </div>
+
+        <a
+          href={`${MEDILOG_URL}?date=${calendar.todayKey}&view=month&utm_source=daily-briefing&utm_medium=button`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 flex w-full items-center justify-center rounded-xl bg-teal-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
+        >
+          메디로그에서 월간 다이어리 열기 →
+        </a>
       </section>
 
       {/* 세무·행정 마감일 */}
