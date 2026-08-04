@@ -72,32 +72,39 @@ export default async function Home() {
       <section className="mb-5 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
         <h2 className="mb-3 text-sm font-semibold text-slate-700">🌤️ 이번 주 날씨 (서울)</h2>
         {weather ? (
-          <div className="-mx-1 flex gap-2 overflow-x-auto pb-1">
-            {weather.map((d) => (
-              <div
-                key={d.date}
-                className="flex min-w-[64px] flex-col items-center rounded-xl bg-slate-50 px-2 py-3"
-              >
-                <span className="text-xs font-semibold text-slate-500">{d.label}</span>
-                <span className="mt-1 text-2xl leading-none">{d.icon}</span>
-                <span className="mt-1 text-xs text-slate-600">{d.skyText}</span>
-                <span className="mt-2 text-xs text-blue-500">
-                  {d.pop !== null ? `${d.pop}%` : "-"}
-                </span>
-                <span className="mt-1 text-xs font-semibold text-slate-800">
-                  {d.tmax !== null ? `${Math.round(d.tmax)}°` : "-"}
-                  <span className="ml-1 font-normal text-slate-400">
-                    {d.tmin !== null ? `${Math.round(d.tmin)}°` : "-"}
+          <>
+            <div className="-mx-1 flex gap-2 overflow-x-auto pb-1">
+              {weather.map((d) => (
+                <div
+                  key={d.date}
+                  className="flex min-w-[64px] flex-col items-center rounded-xl bg-slate-50 px-2 py-3"
+                >
+                  <span className="text-xs font-semibold text-slate-500">{d.label}</span>
+                  <span className="mt-1 text-2xl leading-none">{d.icon}</span>
+                  <span className="mt-1 text-xs text-slate-600">{d.skyText}</span>
+                  <span className="mt-2 text-xs text-blue-500">
+                    {d.pop !== null ? `${d.pop}%` : "-"}
                   </span>
-                </span>
-              </div>
-            ))}
-          </div>
+                  <span className="mt-1 text-xs font-semibold text-slate-800">
+                    {d.tmax !== null ? `${Math.round(d.tmax)}°` : "-"}
+                    <span className="ml-1 font-normal text-slate-400">
+                      {d.tmin !== null ? `${Math.round(d.tmin)}°` : "-"}
+                    </span>
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-2 text-right text-[10px] text-slate-300">
+              예보: {weather.some((d) => d.source === "기상청") ? "기상청" : "Open-Meteo"}
+              {weather.some((d) => d.source === "기상청") &&
+              weather.some((d) => d.source === "Open-Meteo")
+                ? " · 일부 날짜 보완"
+                : ""}
+            </p>
+          </>
         ) : (
           <p className="rounded-xl bg-amber-50 px-3 py-3 text-xs leading-relaxed text-amber-700">
-            날씨 API 키가 설정되지 않았습니다. 공공데이터포털에서 기상청 단기예보·중기예보
-            서비스키를 발급받아 <code className="rounded bg-amber-100 px-1">KMA_SERVICE_KEY</code>{" "}
-            환경변수에 등록해주세요.
+            날씨 정보를 일시적으로 불러오지 못했습니다. 다음 자동 갱신에서 다시 시도합니다.
           </p>
         )}
       </section>
