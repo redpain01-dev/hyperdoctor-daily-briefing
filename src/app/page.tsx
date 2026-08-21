@@ -5,7 +5,7 @@ import { getNasdaq } from "@/lib/nasdaq";
 import { getBitcoin } from "@/lib/bitcoin";
 import { getWeeklyWeather } from "@/lib/weather";
 import { getUpcomingDeadlines } from "@/lib/taxDeadlines";
-import { getTodayQuote } from "@/lib/quotes";
+import { getTodayMovieQuote, getTodayQuote } from "@/lib/quotes";
 import { getMedicalNews } from "@/lib/medNews";
 import { getMedicalJournalReview, type JournalArticle } from "@/lib/pubmedReview";
 import { getNotice } from "@/lib/notice";
@@ -19,6 +19,8 @@ import { kstNow } from "@/lib/kst";
 
 const WEEKDAY_KR = ["일", "월", "화", "수", "목", "금", "토"];
 const MEDILOG_URL = "https://medilog.hyperdoctor.app/";
+const HYPER_SOAP_URL =
+  "https://soap.hyperdoctor.app/?utm_source=daily-briefing&utm_medium=feature-card&utm_campaign=hyper-soap-demo";
 const JOURNAL_PREVIEW_COUNT = 3;
 
 function JournalArticleItem({ item }: { item: JournalArticle }) {
@@ -95,6 +97,7 @@ export default async function Home() {
   ]);
   const deadlines = getUpcomingDeadlines(today);
   const quote = getTodayQuote(today);
+  const movieQuote = getTodayMovieQuote(today);
   const dailyPhrase = getDailyEnglishPhrase(today);
   const notice = getNotice();
   const calendar = getMonthCalendar(today);
@@ -126,13 +129,27 @@ export default async function Home() {
         </p>
       </header>
 
-      {/* 오늘의 명언 */}
-      <section className="mb-5 rounded-2xl bg-white p-5 text-center shadow-sm ring-1 ring-slate-100">
-        <p className="text-xs font-semibold text-blue-500">오늘의 한마디</p>
-        <p className="mt-2 text-base font-medium leading-relaxed text-slate-800">
-          “{quote.text}”
-        </p>
-        <p className="mt-2 text-xs text-slate-400">— {quote.author}</p>
+      {/* 오늘의 문장과 영화 명대사 */}
+      <section className="mb-5 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+        <div className="px-5 py-5 text-center">
+          <p className="text-xs font-semibold text-teal-600">오늘의 한마디</p>
+          <p className="mt-2 text-base font-medium leading-relaxed text-slate-800">
+            “{quote.text}”
+          </p>
+          <p className="mt-2 text-xs text-slate-400">— {quote.author}</p>
+        </div>
+        <div className="border-t border-amber-100 bg-amber-50/70 px-5 py-4">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold text-amber-700">🎬 오늘의 명대사</p>
+            <span className="shrink-0 text-[10px] font-medium text-amber-600/70">
+              {movieQuote.country} · {movieQuote.year}
+            </span>
+          </div>
+          <blockquote className="mt-2 text-sm font-medium leading-relaxed text-slate-700">
+            “{movieQuote.text}”
+          </blockquote>
+          <p className="mt-2 text-right text-[11px] text-slate-500">— 〈{movieQuote.movie}〉</p>
+        </div>
       </section>
 
       {/* 날씨 */}
@@ -426,6 +443,48 @@ export default async function Home() {
         >
           Rapport에서 듣고 따라 말하기 →
         </a>
+      </section>
+
+      {/* Hyper-SOAP 소개 및 공개 데모 연결 */}
+      <section className="mb-5 overflow-hidden rounded-2xl bg-[#071a2d] text-white shadow-sm ring-1 ring-slate-900/10">
+        <Image
+          src="/hyper-soap-promo.png"
+          alt="진료 대화가 네 영역의 구조화된 기록으로 정리되는 Hyper-SOAP 개념 이미지"
+          width={1693}
+          height={929}
+          className="h-auto w-full"
+        />
+        <div className="p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-teal-300/15 px-2.5 py-1 text-[10px] font-semibold text-teal-200 ring-1 ring-inset ring-teal-200/20">
+              HyperDoctor Clinical Workspace
+            </span>
+            <span className="text-[10px] font-medium text-amber-200">DEMO</span>
+          </div>
+          <h2 className="mt-3 text-lg font-bold leading-snug">진료는 대화로. 기록은 Hyper-SOAP으로.</h2>
+          <p className="mt-2 text-xs leading-relaxed text-slate-300">
+            진료 대화와 필요한 사진·문서를 한 번에 정리해 SOAP 초안과 놓치기 쉬운 확인
+            포인트를 짧게 보여주는 AI 차팅 워크스페이스입니다.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-medium text-slate-200">
+            {["대화 녹음", "사진·문서", "SOAP 초안", "확인 포인트"].map((item) => (
+              <span key={item} className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-inset ring-white/10">
+                {item}
+              </span>
+            ))}
+          </div>
+          <a
+            href={HYPER_SOAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 flex min-h-11 w-full items-center justify-center rounded-xl bg-teal-300 px-4 py-3 text-sm font-bold text-slate-950 transition-colors hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#071a2d]"
+          >
+            Hyper-SOAP 데모 버전 살펴보기 →
+          </a>
+          <p className="mt-2 text-[10px] leading-relaxed text-slate-400">
+            AI 결과는 진료기록 초안입니다. 실제 차트 반영 전 의료진의 검토가 필요합니다.
+          </p>
+        </div>
       </section>
 
       {/* 방장 공지 */}
