@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Hyperdoctor">
+  <title>Hyperdoctor</title>
+  <defs>
+    <mask id="hd-icon" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 12V52M10 32H26M26 12V52M26 12h8a20 20 0 0 1 0 40h-8" stroke="#fff" stroke-width="12"/>
+        <path d="M10 12V52M10 32H26M26 12V52M26 12h8a20 20 0 0 1 0 40h-8" stroke="#000" stroke-width="3.5"/>
+        <path d="M41 23v7M37.5 26.5h7" stroke="#fff" stroke-width="2.8"/>
+      </g>
+    </mask>
+    <linearGradient id="hd-icon-depth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#39907F"/>
+      <stop offset="1" stop-color="#236A5D"/>
+    </linearGradient>
+    <clipPath id="hd-icon-clip"><rect width="512" height="512" rx="114"/></clipPath>
+  </defs>
+  <g clip-path="url(#hd-icon-clip)">
+    <rect width="512" height="512" fill="url(#hd-icon-depth)"/>
+    <g fill="none" stroke="#F3F1E9" stroke-width="15" stroke-linecap="round" opacity=".26">
+      <path d="M-40 66q40 -16 80 0t80 0t80 0t80 0t80 0t80 0t80 0"/>
+      <path d="M-10 438q40 -16 80 0t80 0t80 0t80 0t80 0t80 0t80 0"/>
+      <path d="M-60 480q40 -16 80 0t80 0t80 0t80 0t80 0t80 0t80 0"/>
+    </g>
+  </g>
+  <g transform="translate(256 256) scale(5.6) translate(-32 -32)">
+    <rect width="64" height="64" fill="#F3F1E9" mask="url(#hd-icon)"/>
+  </g>
+</svg>

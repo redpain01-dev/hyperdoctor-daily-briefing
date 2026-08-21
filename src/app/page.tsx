@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getUsdKrw } from "@/lib/fx";
 import { getKospi } from "@/lib/kospi";
 import { getNasdaq } from "@/lib/nasdaq";
@@ -101,6 +102,21 @@ export default async function Home() {
   return (
     <main className="mx-auto w-full max-w-md flex-1 px-4 pb-16 pt-8">
       <header className="mb-6 text-center">
+        <a
+          href="https://hyperdoctor.app/"
+          aria-label="Hyperdoctor 전체 도구 홈"
+          className="mb-3 inline-flex items-center gap-2 rounded-xl text-sm font-bold text-[#2E7D6E] outline-none ring-offset-4 focus-visible:ring-2 focus-visible:ring-[#2E7D6E]"
+        >
+          <Image
+            src="/hyperdoctor-icon-512.svg"
+            alt=""
+            aria-hidden="true"
+            width={48}
+            height={48}
+            priority
+          />
+          <span>Hyperdoctor</span>
+        </a>
         <p className="text-sm text-slate-500">{formatToday(today)}</p>
         <h1 className="mt-1 text-xl font-bold text-slate-900">
           🩺 개원의 정석 데일리 브리핑
@@ -440,6 +456,12 @@ export default async function Home() {
       <footer className="text-center text-[11px] leading-relaxed text-slate-400">
         <p>정성웅 · 서울W내과 대표원장 · 『개원의 정석』 저자</p>
         <p className="mt-1">© {today.getUTCFullYear()} 개원의 정석 ver2.0</p>
+        <a
+          href="https://hyperdoctor.app/"
+          className="mt-2 inline-block font-semibold text-[#2E7D6E] underline-offset-4 hover:underline focus-visible:underline"
+        >
+          Hyperdoctor 전체 도구
+        </a>
       </footer>
     </main>
   );

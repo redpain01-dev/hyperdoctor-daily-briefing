@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -15,6 +15,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "개원의 정석 데일리 브리핑",
   description: "개원의 정석 ver2.0 단톡방을 위한 매일 아침 브리핑",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/hyperdoctor-favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", sizes: "64x64", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#2E7D6E",
 };
 
 export default function RootLayout({
