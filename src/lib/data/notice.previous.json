@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "title": "방장 공지",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "text": "위수탁법 청원 24 동의"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "label": "위수탁법 청원 24",
+    "url": "https://www.cheongwon.go.kr/portal/petition/open/viewdetail/PRI547d3de1785e44f493bcf6d801fad55e?pageIndex=1",
+    "targetId": "notice-primary-cta"
+  }
+}
