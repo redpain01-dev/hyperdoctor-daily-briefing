@@ -1,5 +1,12 @@
 # 프로젝트 상태
 
+## 2026-08-27 운영 장애 Hotfix
+
+- 원인: Next.js 16.3.3 업데이트 뒤 `package-lock.json`에서 `@emnapi/core@1.11.3`과 `@emnapi/runtime@1.11.3`이 누락되어 예약 배포의 `npm ci`가 실패함.
+- 수정: GitHub Actions와 동일한 npm 10.8.2로 lockfile을 재생성함.
+- 검증: npm 10.8.2 `npm ci`, 취약점 감사(0건), production static export를 통과함.
+- 산출물 확인: 2026년 8월 27일 KST 날짜, 최신 시장·의료뉴스·PubMed 데이터 렌더링을 확인함.
+
 ## Completed
 
 - 기준 상태 커밋 `f5d246c`
