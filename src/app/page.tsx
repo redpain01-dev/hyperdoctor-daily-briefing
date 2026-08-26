@@ -8,7 +8,7 @@ import { getUpcomingDeadlines } from "@/lib/taxDeadlines";
 import { getTodayMovieQuote, getTodayQuote } from "@/lib/quotes";
 import { getMedicalNews } from "@/lib/medNews";
 import { getMedicalJournalReview, type JournalArticle } from "@/lib/pubmedReview";
-import { getNotice } from "@/lib/notice";
+import { getNotice, type NoticeBlock, type NoticeSpan } from "@/lib/notice";
 import { getDailyEnglishPhrase } from "@/lib/dailyEnglishPhrase";
 import { kstNow } from "@/lib/kst";
 
@@ -22,6 +22,31 @@ const MEDILOG_URL = "https://medilog.hyperdoctor.app/";
 const HYPER_SOAP_URL =
   "https://soap.hyperdoctor.app/?utm_source=daily-briefing&utm_medium=feature-card&utm_campaign=hyper-soap-demo";
 const JOURNAL_PREVIEW_COUNT = 3;
+
+function NoticeInline({ spans }: { spans: NoticeSpan[] }) {
+  return spans.map((span, index) => {
+    let content: React.ReactNode = span.text;
+    for (const mark of span.marks ?? []) {
+      if (mark.type === "bold") content = <strong>{content}</strong>;
+      if (mark.type === "link") content = <a href={mark.href} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline decoration-blue-300 underline-offset-2">{content}</a>;
+    }
+    return <span key={`${span.text}-${index}`}>{content}</span>;
+  });
+}
+
+function NoticeContent({ blocks }: { blocks: NoticeBlock[] }) {
+  return blocks.map((block, index) => {
+    if (block.type === "paragraph") return <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-slate-700" key={`paragraph-${index}`}><NoticeInline spans={block.children} /></p>;
+    if (block.type === "quote") return <blockquote className="mt-3 border-l-2 border-blue-300 pl-3 text-sm leading-relaxed text-slate-600" key={`quote-${index}`}><NoticeInline spans={block.children} /></blockquote>;
+    if (block.type === "bulletList") return <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-relaxed text-slate-700" key={`list-${index}`}>{block.items.map((item, itemIndex) => <li key={itemIndex}><NoticeInline spans={item} /></li>)}</ul>;
+    return (
+      <figure className="mt-4 overflow-hidden rounded-xl bg-white ring-1 ring-blue-100" key={block.id}>
+        <Image src={block.src} alt={block.alt} width={block.width} height={block.height} sizes="(max-width: 640px) calc(100vw - 72px), 408px" className="h-auto w-full" />
+        {block.caption && <figcaption className="px-3 py-2 text-[11px] leading-relaxed text-slate-500">{block.caption}</figcaption>}
+      </figure>
+    );
+  });
+}
 
 function JournalArticleItem({ item }: { item: JournalArticle }) {
   return (
@@ -491,17 +516,15 @@ export default async function Home() {
       {notice.enabled && (
         <section className="mb-5 rounded-2xl bg-blue-50 p-5 ring-1 ring-blue-100">
           <p className="text-xs font-semibold text-blue-600">📢 {notice.title}</p>
-          <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-slate-700">
-            {notice.message}
-          </p>
-          {notice.linkUrl && (
+          <NoticeContent blocks={notice.blocks} />
+          {notice.cta && (
             <a
-              href={notice.linkUrl}
+              href={notice.cta.url}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-3 inline-block rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white"
             >
-              {notice.linkLabel} →
+              {notice.cta.label} →
             </a>
           )}
         </section>
