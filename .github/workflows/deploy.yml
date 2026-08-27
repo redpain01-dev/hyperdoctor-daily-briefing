@@ -5,11 +5,11 @@ on:
     branches: [main]
   schedule:
     # GitHub Actions 예약 실행(cron)은 정시에 도는 게 보장되지 않고 실제로
-    # 몇 시간씩 늦게 도는 경우가 흔하다(관측: 05:30 예약 → 08:47 실행).
-    # 그래서 한 번만 예약하지 않고, 한국시간 새벽 2시~7시 30분 사이 30분마다
-    # 반복 실행해서 그 안에 최소 한 번은 확실히 성공하도록 한다.
+    # 몇 시간씩 늦거나, 정각처럼 혼잡한 시각에는 드롭될 수 있다.
+    # 혼잡한 정각/30분을 피해 한국시간 새벽 2시 7분~8시 37분 사이 30분마다
+    # 반복 실행해서 성공 기회를 넓힌다.
     # (public 저장소라 Actions 실행 시간에 비용이 들지 않는다.)
-    - cron: "0,30 17-22 * * *"
+    - cron: "7,37 17-23 * * *"
   workflow_dispatch:
 
 permissions:
@@ -38,6 +38,13 @@ jobs:
         env:
           KMA_SERVICE_KEY: ${{ secrets.KMA_SERVICE_KEY }}
         run: npm run build
+
+      - name: Verify current KST edition
+        shell: bash
+        run: |
+          expected_date="$(TZ=Asia/Seoul date '+%Y년 %-m월 %-d일')"
+          echo "Expected page date: ${expected_date}"
+          grep -Fq "${expected_date}" out/index.html
 
       - uses: actions/configure-pages@v5
 
