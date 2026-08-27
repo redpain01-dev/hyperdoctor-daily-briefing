@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "sections": [
+    {
+      "id": "daily-quote",
+      "visible": true
+    },
+    {
+      "id": "weather",
+      "visible": true
+    },
+    {
+      "id": "market",
+      "visible": true
+    },
+    {
+      "id": "medilog",
+      "visible": true
+    },
+    {
+      "id": "tax-calendar",
+      "visible": true
+    },
+    {
+      "id": "medical-news",
+      "visible": true
+    },
+    {
+      "id": "journal",
+      "visible": true
+    },
+    {
+      "id": "clinical-english",
+      "visible": true
+    },
+    {
+      "id": "hyper-soap",
+      "visible": true
+    },
+    {
+      "id": "notice",
+      "visible": true
+    },
+    {
+      "id": "advertisement",
+      "visible": true
+    }
+  ],
+  "publishedAt": "2026-08-27T00:55:36.767Z"
+}
