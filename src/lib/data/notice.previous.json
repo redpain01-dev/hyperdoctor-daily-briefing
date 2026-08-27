@@ -7,15 +7,15 @@
       "type": "paragraph",
       "children": [
         {
-          "text": "위수탁법 청원 24 동의"
+          "text": "원장님들 지난번 개원의 정석방에서 이야기가 나왔던 리비짓에 대해 소개 해드리겠습니다. 리비짓은 환자분들에게 검사 결과를 카카오톡으로 전송하는 CRM 앱입니다. 이전처럼 검사 결과를 문자로 보내면 환자분들이 스팸으로 처리하기도 하고, 별도의 금액이 많이 발생하는데 카카오톡으로 검사 결과를 보내면 비밀번호가 걸려서 프라이빗하게 결과를 안내할 수 있습니다. 병원 홍보에도 도움이 많이 되는 것 같습니다. ^^ㅋ 제가 리비짓 모션랩스 이우진 대표님에게 말씀 드려서 저희 개정방 원장님에게 제 소개로 가입하시는 분들에게 1달 무료 적용하실수 있도록 혜택을 받았습니다. 세팅비도 없고, 약정기간도 없습니다. 원하시는 분들은 아래 링크를 통해서 안내 한번 받아보세요~^^ㅋ\n\n\n\n모션랩스 장점 : 다른 CRM 회사와 달리 세팅비X, 약정기간 X \n\n\n\nhttps://promo-w.vercel.app/promo/jsw-8k3d2p"
         }
       ]
     }
   ],
   "cta": {
-    "label": "위수탁법 청원 24",
-    "url": "https://www.cheongwon.go.kr/portal/petition/open/viewdetail/PRI547d3de1785e44f493bcf6d801fad55e?pageIndex=1",
+    "label": "리비짓 문의 하기",
+    "url": "https://promo-w.vercel.app/promo/jsw-8k3d2p",
     "targetId": "notice-primary-cta"
   },
-  "publishedAt": "2026-08-26T14:49:07.958Z"
+  "publishedAt": "2026-08-27T06:33:23.238Z"
 }
