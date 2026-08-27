@@ -1,3 +1,5 @@
+export { default } from "./section-page";
+
 import Image from "next/image";
 import { getUsdKrw } from "@/lib/fx";
 import { getKospi } from "@/lib/kospi";
@@ -108,7 +110,9 @@ function getMonthCalendar(today: Date) {
   };
 }
 
-export default async function Home() {
+// Kept temporarily as a source-level rollback reference while SectionConfig is awaiting publication approval.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function LegacyHome() {
   const today = kstNow();
 
   const [fx, kospi, nasdaq, bitcoin, weather, news, journalReview] = await Promise.all([
