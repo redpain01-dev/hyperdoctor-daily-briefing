@@ -12,6 +12,7 @@ export interface MovieQuote {
   movie: string;
   year: number;
   country: string;
+  resonance: string;
 }
 
 // today는 kstNow()로 만든 값이라는 전제 하에, getUTC*()로만 읽어야 KST 기준 날짜가 나온다.
