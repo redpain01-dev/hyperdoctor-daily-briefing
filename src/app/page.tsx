@@ -165,9 +165,7 @@ async function LegacyHome() {
           <p className="mt-2 text-base font-medium leading-relaxed text-slate-800">
             “{quote.text}”
           </p>
-          <p className="mt-2 text-xs text-slate-400">
-            {quote.author === "데일리 브리핑" ? "✦ 개원의 정석 편집 문장" : `— ${quote.author}`}
-          </p>
+          <p className="mt-2 text-xs text-slate-400">— {quote.author}</p>
         </div>
         <div className="border-t border-amber-100 bg-amber-50/70 px-5 py-4">
           <div className="flex items-center justify-between gap-3">
