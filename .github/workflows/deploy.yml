@@ -11,6 +11,7 @@ on:
     # (public 저장소라 Actions 실행 시간에 비용이 들지 않는다.)
     - cron: "7,37 17-23 * * *"
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
