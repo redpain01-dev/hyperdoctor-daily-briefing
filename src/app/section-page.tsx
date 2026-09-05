@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
+import { HyperInvestBriefingCard } from "@/components/hyperinvest-briefing-card";
 import {
   AdvertisementSection,
   ClinicalEnglishSection,
@@ -62,7 +63,7 @@ export default async function SectionPage() {
     "tax-calendar": <TaxCalendarSection deadlines={deadlines} />,
     "medical-news": <MedicalNewsSection news={news} />,
     journal: <JournalSection journalReview={journalReview} />,
-    "clinical-english": <ClinicalEnglishSection dailyPhrase={dailyPhrase} />,
+    "clinical-english": <><ClinicalEnglishSection dailyPhrase={dailyPhrase} /><HyperInvestBriefingCard /></>,
     "hyper-soap": <HyperSoapSection />,
     notice: <NoticeSection notice={notice} />,
     advertisement: <AdvertisementSection />,
