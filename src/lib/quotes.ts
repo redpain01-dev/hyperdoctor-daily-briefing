@@ -2,9 +2,15 @@ import quotes from "./data/quotes.json";
 import movieQuotes from "./data/movieQuotes.json";
 import { kstNow } from "./kst";
 
+interface QuoteData {
+  text: string;
+  author?: string;
+  source?: string;
+}
+
 export interface Quote {
   text: string;
-  author: string;
+  source: string;
 }
 
 export interface MovieQuote {
@@ -15,22 +21,45 @@ export interface MovieQuote {
   resonance: string;
 }
 
-// today는 kstNow()로 만든 값이라는 전제 하에, getUTC*()로만 읽어야 KST 기준 날짜가 나온다.
-function dayOfYear(d: Date) {
-  const start = Date.UTC(d.getUTCFullYear(), 0, 0);
-  const diff = d.getTime() - start;
-  return Math.floor(diff / (1000 * 60 * 60 * 24));
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+function greatestCommonDivisor(a: number, b: number) {
+  let left = a;
+  let right = b;
+  while (right !== 0) {
+    [left, right] = [right, left % right];
+  }
+  return left;
+}
+
+// 풀 크기와 서로소인 보폭을 사용하면 모든 항목을 한 번씩 보여주기 전에는 반복되지 않는다.
+function getFullCycleIndex(today: Date, length: number, salt: number) {
+  if (length === 0) throw new Error("문구 풀이 비어 있습니다.");
+
+  const dateOnly = Date.UTC(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate(),
+  );
+  const absoluteDay = Math.floor(dateOnly / DAY_IN_MS);
+  let stride = Math.max(2, Math.floor(length * 0.618));
+  while (greatestCommonDivisor(stride, length) !== 1) stride += 1;
+
+  return ((absoluteDay * stride + salt) % length + length) % length;
 }
 
 export function getTodayQuote(today: Date = kstNow()): Quote {
-  const list = quotes as Quote[];
-  const idx = dayOfYear(today) % list.length;
-  return list[idx];
+  const list = quotes as QuoteData[];
+  const item = list[getFullCycleIndex(today, list.length, 17)];
+  return {
+    text: item.text,
+    // 기존 자체 편집 문장은 author를 유지하고, 출처가 있는 신규 문장은 source를 우선한다.
+    source: item.source ?? item.author ?? "데일리 브리핑",
+  };
 }
 
 export function getTodayMovieQuote(today: Date = kstNow()): MovieQuote {
   const list = movieQuotes as MovieQuote[];
-  // 일반 문장과 영화 대사의 순환 패턴이 겹치지 않도록 다른 보폭으로 순환한다.
-  const idx = (dayOfYear(today) * 7 + today.getUTCFullYear()) % list.length;
+  const idx = getFullCycleIndex(today, list.length, 43);
   return list[idx];
 }
