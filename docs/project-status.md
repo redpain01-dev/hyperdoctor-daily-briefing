@@ -7,7 +7,7 @@
 - 기존 관리자 코너 스키마 유지: 진료영어·HyperInvest·HyperLive는 `clinical-english` 묶음의 표시·순서 설정을 함께 따른다.
 - 검증: production build(TypeScript 포함), 변경 TSX ESLint, diff 검사 통과. 375px 브라우저에서 문서 너비 375px/카드 343px/버튼 44px, 로고 로딩과 HyperLive 새 탭 이동 확인. 페이지 오류 없음.
 - 로컬 빌드는 기상청 키 없이 기존 날씨 fallback을 사용했으며 운영 빌드는 기존 GitHub Secret을 유지한다.
-- 운영 반영: 사용자 승인된 `main` 게시와 GitHub Pages 배포 진행 예정.
+- 운영 반영 완료: `b89a281`을 `main`에 게시했고 GitHub Pages run `35934568787`에서 빌드·당일 KST 날짜 검사·배포가 성공했다. 공개 `briefing.hyperdoctor.app` 브라우저에서도 시장 브리핑 → HyperLive → Hyper-SOAP 순서와 CTA 주소를 확인했다.
 
 ## 2026-09-06 문구 출처·순환 개선
 
