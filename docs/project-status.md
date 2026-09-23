@@ -1,5 +1,14 @@
 # 프로젝트 상태
 
+## 2026-09-24 HyperLive 의료 통역 소개 카드
+
+- 사용자가 요청한 위치인 HyperInvest 오늘의 7분 시장 브리핑 아래, Hyper-SOAP 위에 HyperLive 카드 추가.
+- 공식 앱 아이콘, 두 언어 대화 모티프, 기능 소개와 UTM이 있는 새 탭 CTA 적용. 이미지 추가 크기는 약 17.2 KiB.
+- 기존 관리자 코너 스키마 유지: 진료영어·HyperInvest·HyperLive는 `clinical-english` 묶음의 표시·순서 설정을 함께 따른다.
+- 검증: production build(TypeScript 포함), 변경 TSX ESLint, diff 검사 통과. 375px 브라우저에서 문서 너비 375px/카드 343px/버튼 44px, 로고 로딩과 HyperLive 새 탭 이동 확인. 페이지 오류 없음.
+- 로컬 빌드는 기상청 키 없이 기존 날씨 fallback을 사용했으며 운영 빌드는 기존 GitHub Secret을 유지한다.
+- 운영 반영: 사용자 승인된 `main` 게시와 GitHub Pages 배포 진행 예정.
+
 ## 2026-09-06 문구 출처·순환 개선
 
 - 오늘의 한마디를 220개에서 330개로 확대하고, 신규 고전 문장 110개에 저자·작품명과 `뜻을 옮김` 표기를 추가함.

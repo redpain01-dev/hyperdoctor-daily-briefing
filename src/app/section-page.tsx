@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
 import { HyperInvestBriefingCard } from "@/components/hyperinvest-briefing-card";
+import { HyperLivePromoCard } from "@/components/hyperlive-promo-card";
 import {
   AdvertisementSection,
   ClinicalEnglishSection,
@@ -63,7 +64,14 @@ export default async function SectionPage() {
     "tax-calendar": <TaxCalendarSection deadlines={deadlines} />,
     "medical-news": <MedicalNewsSection news={news} />,
     journal: <JournalSection journalReview={journalReview} />,
-    "clinical-english": <><ClinicalEnglishSection dailyPhrase={dailyPhrase} /><HyperInvestBriefingCard /></>,
+    // Keep the existing section ID so manager-published order/visibility settings remain valid.
+    "clinical-english": (
+      <>
+        <ClinicalEnglishSection dailyPhrase={dailyPhrase} />
+        <HyperInvestBriefingCard />
+        <HyperLivePromoCard />
+      </>
+    ),
     "hyper-soap": <HyperSoapSection />,
     notice: <NoticeSection notice={notice} />,
     advertisement: <AdvertisementSection />,
