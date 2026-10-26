@@ -1,7 +1,12 @@
 import Image from "next/image";
+import { StoreInstallLink, StoreRegistrationBadge } from "@/components/store-install-link";
 
 const HYPERLIVE_URL =
   "https://hyperlive.hyperdoctor.app/?utm_source=daily-briefing&utm_medium=feature-card&utm_campaign=hyperlive-medical-interpreter";
+const HYPERLIVE_MICROSOFT_STORE_URL =
+  "https://apps.microsoft.com/detail/9NJ99V7NXF42?hl=ko-KR&gl=KR";
+const HYPERLIVE_GOOGLE_PLAY_URL =
+  "https://play.google.com/store/apps/details?id=app.hyperdoctor.hyperlive&hl=ko&gl=KR";
 
 export function HyperLivePromoCard() {
   return (
@@ -34,18 +39,22 @@ export function HyperLivePromoCard() {
             <p className="mt-1 text-sm font-medium text-white">안녕하세요.</p>
           </div>
         </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <StoreRegistrationBadge store="microsoft" />
+          <StoreRegistrationBadge store="google-play" />
+        </div>
       </div>
 
       <div className="p-5">
         <p className="text-[10px] font-semibold tracking-wider text-teal-200">
-          HYPERDOCTOR · 의료 통역
+          HYPERDOCTOR · WINDOWS &amp; ANDROID
         </p>
         <h2 id="hyperlive-promo-title" className="mt-3 text-lg font-bold leading-snug">
-          언어가 달라도, 진료 대화는 이어지도록.
+          진료 통역을 PC와 Android 앱에서 더 빠르게.
         </h2>
         <p className="mt-2 text-xs leading-relaxed text-slate-200">
-          외국인 환자와의 대화를 원문과 한국어로 나란히 확인하세요.
-          하이퍼라이브의 실시간 통역과 함께 보기로 진료실의 소통을 도와드립니다.
+          하이퍼라이브가 Microsoft Store와 Google Play에 등록됐습니다.
+          진료실 PC와 Android 기기에 설치해 원문과 한국어를 나란히 확인하세요.
         </p>
         <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-medium text-teal-50">
           {["실시간 통역", "원문·한국어 함께 보기", "환자 QR 연결"].map((feature) => (
@@ -54,15 +63,12 @@ export function HyperLivePromoCard() {
             </span>
           ))}
         </div>
-        <a
-          href={HYPERLIVE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 flex min-h-11 w-full items-center justify-center rounded-xl bg-teal-300 px-4 py-3 text-sm font-bold text-slate-950 transition-colors hover:bg-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#082b30]"
-        >
-          하이퍼라이브 의료 통역 열기 →
-        </a>
-        <p className="mt-2 text-[10px] leading-relaxed text-slate-300">
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <StoreInstallLink store="microsoft" href={HYPERLIVE_MICROSOFT_STORE_URL} product="HyperLive" />
+          <StoreInstallLink store="google-play" href={HYPERLIVE_GOOGLE_PLAY_URL} product="하이퍼라이브" />
+        </div>
+        <a href={HYPERLIVE_URL} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 w-full items-center justify-center rounded-xl bg-teal-300/10 px-4 py-3 text-xs font-bold text-teal-100 ring-1 ring-inset ring-teal-200/20 transition-colors hover:bg-teal-300/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#082b30]">설치 없이 웹에서 먼저 보기 →</a>
+        <p className="mt-3 text-[10px] leading-relaxed text-slate-300">
           Google 로그인 후 이용할 수 있습니다. 중요한 진료 내용은 의료진이 다시 확인해 주세요.
         </p>
       </div>

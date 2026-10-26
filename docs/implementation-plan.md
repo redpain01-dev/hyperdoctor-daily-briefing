@@ -7,3 +7,4 @@
 5. Hyper-SOAP 프로모션 이미지와 안전 고지가 포함된 데모 CTA를 진료영어 아래에 배치한다. 완료
 6. 데이터, 린트, 타입, 빌드, 반응형 화면, 메타 태그, 외부 링크를 검증한다. 완료
 7. 기능 커밋 후 `main`에 배포하고 운영 사이트를 확인한다. 완료
+8. Hyper-SOAP·HyperLive 카드에 검증된 Microsoft Store·Google Play 설치 링크와 플랫폼 표식을 추가하고 production을 확인한다. 완료

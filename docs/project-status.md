@@ -1,5 +1,13 @@
 # 프로젝트 상태
 
+## 2026-10-26 스토어 설치 카드 업그레이드
+
+- Hyper-SOAP 카드에 Windows 로고와 Microsoft Store 등록 배지, 공식 Microsoft Store 설치 버튼을 추가함.
+- HyperLive 카드에 Windows·Google Play 로고와 양쪽 스토어 등록 배지, Microsoft Store·Google Play 직접 설치 버튼을 추가함.
+- 두 카드 모두 웹 버전을 보조 CTA로 유지하고, 새 창 안내·최소 터치 영역·기존 의료 안전 고지를 보존함.
+- 공식 등록 링크 확인: Hyper-SOAP Microsoft Store, HyperLive Microsoft Store, HyperLive Google Play 모두 응답 및 앱 식별 정보 일치.
+- 로컬 검증: ESLint, TypeScript 포함 production build, 생성 HTML의 2026년 10월 26일 날짜·배지·3개 설치 링크·플랫폼 로고 확인 통과.
+
 ## 2026-09-24 HyperLive 의료 통역 소개 카드
 
 - 사용자가 요청한 위치인 HyperInvest 오늘의 7분 시장 브리핑 아래, Hyper-SOAP 위에 HyperLive 카드 추가.
