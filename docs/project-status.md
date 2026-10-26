@@ -7,6 +7,8 @@
 - 두 카드 모두 웹 버전을 보조 CTA로 유지하고, 새 창 안내·최소 터치 영역·기존 의료 안전 고지를 보존함.
 - 공식 등록 링크 확인: Hyper-SOAP Microsoft Store, HyperLive Microsoft Store, HyperLive Google Play 모두 응답 및 앱 식별 정보 일치.
 - 로컬 검증: ESLint, TypeScript 포함 production build, 생성 HTML의 2026년 10월 26일 날짜·배지·3개 설치 링크·플랫폼 로고 확인 통과.
+- 운영 반영 완료: 기능 커밋 `4604869`를 기능 브랜치와 `main`에 게시했고 GitHub Pages run `40327224666`의 빌드·당일 KST 날짜 검사·배포가 성공함.
+- 공개 검증: `briefing.hyperdoctor.app` 응답 `200`, 2026년 10월 26일 날짜, Microsoft Store 설치 버튼 2개, Google Play 설치 버튼 1개, 세 공식 스토어 상세 링크와 플랫폼 로고 확인. 외부 스토어 3곳도 모두 응답 `200`.
 
 ## 2026-09-24 HyperLive 의료 통역 소개 카드
 
