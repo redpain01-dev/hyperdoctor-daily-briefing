@@ -20,7 +20,7 @@ export type SectionConfigEntry = { id: SectionId; visible: boolean };
 export type SectionConfig = { schemaVersion: 1; sections: SectionConfigEntry[]; publishedAt?: string };
 
 export function createDefaultSectionConfig(): SectionConfig {
-  return { schemaVersion: 1, sections: SECTION_IDS.map((id) => ({ id, visible: true })) };
+  return { schemaVersion: 1, sections: SECTION_IDS.map((id) => ({ id, visible: id !== "advertisement" })) };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

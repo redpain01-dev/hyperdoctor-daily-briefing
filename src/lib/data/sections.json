@@ -43,7 +43,7 @@
     },
     {
       "id": "advertisement",
-      "visible": true
+      "visible": false
     }
   ],
   "publishedAt": "2026-08-27T00:55:36.767Z"
