@@ -20,6 +20,9 @@
 # production
 /build
 
+# Local cross-app implementation staging
+/.work/
+
 # misc
 .DS_Store
 *.pem

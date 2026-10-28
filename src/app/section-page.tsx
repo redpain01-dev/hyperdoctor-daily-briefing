@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
 import { HyperInvestBriefingCard } from "@/components/hyperinvest-briefing-card";
 import { HyperLivePromoCard } from "@/components/hyperlive-promo-card";
+import { AnonymousPollCard } from "@/components/anonymous-poll-card";
 import {
   AdvertisementSection,
   ClinicalEnglishSection,
@@ -102,9 +103,12 @@ export default async function SectionPage() {
         </p>
       </header>
 
-      {sectionConfig.sections
-        .filter((section) => section.visible)
-        .map((section) => <Fragment key={section.id}>{sectionViews[section.id]}</Fragment>)}
+      {sectionConfig.sections.map((section) => (
+        <Fragment key={section.id}>
+          {section.id === "advertisement" && <AnonymousPollCard />}
+          {section.visible && sectionViews[section.id]}
+        </Fragment>
+      ))}
 
       <footer className="text-center text-[11px] leading-relaxed text-slate-400">
         <p>정성웅 · 서울W내과 대표원장 · 『개원의 정석』 저자</p>
