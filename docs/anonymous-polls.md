@@ -24,4 +24,8 @@
 
 관리자 서버 전용 `POLL_SUPABASE_URL`, `POLL_SUPABASE_PUBLISHABLE_KEY`, `POLL_SERVICE_TOKEN`으로 저장소를 연결한다. 서비스 토큰 원문은 환경변수에서만 보관하고 데이터베이스에는 해시만 저장한다. 공개 브리핑에는 이 환경변수를 전달하지 않는다.
 
-SQL 구현과 트랜잭션 검증은 `db/briefing-polls.sql`, `db/verify-briefing-polls.sql`에 둔다. 운영 데이터베이스 선택·연결 완료 후 검증한 버전만 적용한다.
+SQL 구현과 트랜잭션 검증은 `db/briefing-polls.sql`, `db/verify-briefing-polls.sql`에 둔다. 2026-10-29 사용자 승인으로 한국 리전 `hyperread-db`의 `briefing_private` 스키마에 연결했고 `add_briefing_anonymous_polls` 마이그레이션을 적용했다. 환경변수는 관리자 production에만 저장한다.
+
+관리 주소는 `https://briefing-admin.hyperdoctor.app/polls`이며 기존 Google 관리자 로그인을 사용한다. 첫 AI 구독 투표는 2026-11-05 23:59 KST에 마감한다. 새 투표는 생성 시점부터 7일 뒤 23:59 KST를 기본값으로 제안한다.
+
+보안 점검의 [RLS enabled no policy](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy) 안내는 비공개 테이블의 직접 읽기·쓰기를 전부 차단하려는 설계와 일치한다. 공개 RPC의 [anon security definer](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable) 경고도 서버 전용 비밀 토큰으로 모든 동작을 검증하는 의도된 진입점이다. 클라이언트에 비밀 토큰을 전달하거나 테이블 권한을 추가하지 않는다. 운영 검증에서 잘못된 토큰과 원본 투표 테이블 접근이 거부되는 것을 확인했다.
