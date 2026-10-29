@@ -13,6 +13,8 @@ const MEDILOG_URL = "https://medilog.hyperdoctor.app/";
 const HYPER_SOAP_URL = "https://soap.hyperdoctor.app/?utm_source=daily-briefing&utm_medium=feature-card&utm_campaign=hyper-soap-demo";
 const HYPER_SOAP_MICROSOFT_STORE_URL =
   "https://apps.microsoft.com/detail/9nwg7gwlh6c0?hl=ko-KR&gl=KR";
+const HYPER_SOAP_GOOGLE_PLAY_URL =
+  "https://play.google.com/store/apps/details?id=app.hyperdoctor.hypersoap&hl=ko&gl=KR";
 const JOURNAL_PREVIEW_COUNT = 3;
 
 type Quote = ReturnType<typeof getTodayQuote>;
@@ -106,7 +108,34 @@ export function ClinicalEnglishSection({ dailyPhrase }: { dailyPhrase: DailyPhra
 }
 
 export function HyperSoapSection() {
-  return <section aria-labelledby="hyper-soap-promo-title" className="mb-5 overflow-hidden rounded-2xl bg-[#071a2d] text-white shadow-sm ring-1 ring-slate-900/10"><div className="relative"><Image src="/hyper-soap-promo.png" alt="진료 대화가 네 영역의 구조화된 기록으로 정리되는 Hyper-SOAP 개념 이미지" width={1693} height={929} className="h-auto w-full" /><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#071a2d] to-transparent px-5 pb-4 pt-10"><StoreRegistrationBadge store="microsoft" /></div></div><div className="p-5 pt-3"><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-teal-300/15 px-2.5 py-1 text-[10px] font-semibold text-teal-200 ring-1 ring-inset ring-teal-200/20">HyperDoctor Clinical Workspace</span><span className="text-[10px] font-semibold text-sky-200">WINDOWS APP</span></div><h2 id="hyper-soap-promo-title" className="mt-3 text-lg font-bold leading-snug">진료는 대화로. 기록은 Hyper-SOAP으로.</h2><p className="mt-2 text-xs leading-relaxed text-slate-300">진료 대화를 SOAP 초안과 확인 포인트로 정리하는 AI 차팅 워크스페이스를 이제 Microsoft Store에서 Windows 앱으로 바로 설치할 수 있습니다.</p><div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-medium text-slate-200">{["대화 녹음", "사진·문서", "SOAP 초안", "확인 포인트"].map((item) => <span key={item} className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-inset ring-white/10">{item}</span>)}</div><div className="mt-4"><StoreInstallLink store="microsoft" href={HYPER_SOAP_MICROSOFT_STORE_URL} product="Hyper-SOAP" /></div><a href={HYPER_SOAP_URL} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 w-full items-center justify-center rounded-xl bg-teal-300/10 px-4 py-3 text-xs font-bold text-teal-100 ring-1 ring-inset ring-teal-200/20 transition-colors hover:bg-teal-300/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#071a2d]">설치 없이 웹에서 먼저 보기 →</a><p className="mt-3 text-[10px] leading-relaxed text-slate-400">AI 결과는 진료기록 초안입니다. 실제 차트 반영 전 의료진의 검토가 필요합니다.</p></div></section>;
+  return (
+    <section aria-labelledby="hyper-soap-promo-title" className="mb-5 overflow-hidden rounded-2xl bg-[#071a2d] text-white shadow-sm ring-1 ring-slate-900/10">
+      <div className="relative">
+        <Image src="/hyper-soap-promo.png" alt="진료 대화가 네 영역의 구조화된 기록으로 정리되는 Hyper-SOAP 개념 이미지" width={1693} height={929} className="h-auto w-full" />
+        <div className="absolute inset-x-0 bottom-0 flex flex-wrap gap-2 bg-gradient-to-t from-[#071a2d] to-transparent px-5 pb-4 pt-10">
+          <StoreRegistrationBadge store="microsoft" />
+          <StoreRegistrationBadge store="google-play" />
+        </div>
+      </div>
+      <div className="p-5 pt-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-teal-300/15 px-2.5 py-1 text-[10px] font-semibold text-teal-200 ring-1 ring-inset ring-teal-200/20">HyperDoctor Clinical Workspace</span>
+          <span className="text-[10px] font-semibold text-sky-200">WINDOWS &amp; ANDROID</span>
+        </div>
+        <h2 id="hyper-soap-promo-title" className="mt-3 text-lg font-bold leading-snug">진료는 대화로. 기록은 Hyper-SOAP으로.</h2>
+        <p className="mt-2 text-xs leading-relaxed text-slate-300">하이퍼솝이 Microsoft Store와 Google Play에 등록됐습니다. 진료 대화를 SOAP 초안과 확인 포인트로 정리하는 AI 차팅 워크스페이스를 Windows PC와 Android 기기에 바로 설치하세요.</p>
+        <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] font-medium text-slate-200">
+          {["대화 녹음", "사진·문서", "SOAP 초안", "확인 포인트"].map((item) => <span key={item} className="rounded-full bg-white/8 px-2.5 py-1 ring-1 ring-inset ring-white/10">{item}</span>)}
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <StoreInstallLink store="microsoft" href={HYPER_SOAP_MICROSOFT_STORE_URL} product="Hyper-SOAP" />
+          <StoreInstallLink store="google-play" href={HYPER_SOAP_GOOGLE_PLAY_URL} product="하이퍼솝" />
+        </div>
+        <a href={HYPER_SOAP_URL} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 w-full items-center justify-center rounded-xl bg-teal-300/10 px-4 py-3 text-xs font-bold text-teal-100 ring-1 ring-inset ring-teal-200/20 transition-colors hover:bg-teal-300/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#071a2d]">설치 없이 웹에서 먼저 보기 →</a>
+        <p className="mt-3 text-[10px] leading-relaxed text-slate-400">AI 결과는 진료기록 초안입니다. 실제 차트 반영 전 의료진의 검토가 필요합니다.</p>
+      </div>
+    </section>
+  );
 }
 
 export function NoticeSection({ notice }: { notice: Notice }) {
