@@ -20,6 +20,6 @@
 2. Repository permissions의 `Contents`를 `Read and write`로 지정한다. `repository_dispatch`에 필요한 권한은 이것이다. 만료일을 기록하고 만료 전에 갱신한다. 토큰을 저장소나 채팅에 붙여 넣지 않는다.
 3. Vercel의 `briefing-admin` 프로젝트 → Settings → Environment Variables에서 production `GITHUB_TOKEN`의 값을 교체한다. 값은 Sensitive로 유지한다.
 4. Vercel의 `briefing-admin` 최신 production 배포를 **Redeploy**한다. 환경 변수 변경은 기존 배포에 적용되지 않는다.
-5. 다음 감시 실행 또는 의도적으로 오래된 판을 감지하는 검증에서 GitHub 401이 사라졌는지 확인한다. 실제 공개 페이지가 오늘판이면 감시 API는 `current`를 반환하며 GitHub 호출은 하지 않는다.
+5. `CRON_SECRET` Bearer 인증으로 `/api/internal/daily-briefing-watchdog?check=github`를 호출하면 사이트를 재빌드하지 않고 `repository_dispatch` 권한을 검사한다. HTTP 200과 `github_credential_valid`를 확인한다. 만료 또는 권한 부족이면 HTTP 502와 `github_credential_rejected`를 반환한다. 평소의 감시 경로는 공개 페이지가 오늘판이면 `current`를 반환하고 GitHub 호출은 하지 않는다.
 
 기존 GitHub 토큰은 2026-11-24에 만료됐으며, 2026-11-26 기준 새 토큰 교체가 필요하다.
