@@ -22,4 +22,4 @@
 4. Vercel의 `briefing-admin` 최신 production 배포를 **Redeploy**한다. 환경 변수 변경은 기존 배포에 적용되지 않는다.
 5. `CRON_SECRET` Bearer 인증으로 `/api/internal/daily-briefing-watchdog?check=github`를 호출하면 사이트를 재빌드하지 않고 `repository_dispatch` 권한을 검사한다. HTTP 200과 `github_credential_valid`를 확인한다. 만료 또는 권한 부족이면 HTTP 502와 `github_credential_rejected`를 반환한다. 평소의 감시 경로는 공개 페이지가 오늘판이면 `current`를 반환하고 GitHub 호출은 하지 않는다.
 
-기존 GitHub 토큰은 2026-11-24에 만료됐으며, 2026-11-26 기준 새 토큰 교체가 필요하다.
+기존 GitHub 토큰은 2026-11-24에 만료됐다. 2026-11-26에 production 값을 교체하고 새 배포에 적용했다. 새 토큰의 실제 dispatch 권한 검사는 아직 확인되지 않았다.

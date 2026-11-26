@@ -6,7 +6,7 @@
 - Vercel 날짜 감시는 11월 25일과 26일 오전 1시 KST에 정상 실행됐지만 GitHub 배포 요청은 두 번 모두 HTTP 401로 거절됐다. 8월 26일 등록한 `GITHUB_TOKEN`은 11월 24일 만료됐고 production 환경 변수는 교체되지 않았다.
 - 컴퓨터의 별도 유효한 GitHub 인증으로 `repository_dispatch`를 요청했다. GitHub Pages run `45716151501`의 빌드·당일 날짜 검사·배포가 성공했고 공개 사이트에서 11월 26일판을 확인했다.
 - 관리자 앱 커밋 `062e19b`를 Vercel production 배포 `dpl_79jKaa4P5uzhHQqfVhPtDutnzHJ9`로 반영했다. 새 인증 검사 경로는 배포를 시작하지 않는 이벤트로 GitHub 권한을 확인하며, 무인증 요청을 HTTP 401로 거부한다. 집중 테스트 12개, 타입 검사와 ESLint가 통과했다.
-- Vercel production의 만료된 `GITHUB_TOKEN`은 새 저장소 전용 토큰으로 교체하고 관리자 앱을 재배포해야 자동 복구가 다시 작동한다. 교체 절차는 `docs/daily-refresh-operations.md`에 기록했다.
+- 사용자가 Vercel production의 `GITHUB_TOKEN`을 교체했고, 변경 시각 이후 관리자 앱을 production 배포 `dpl_Ecy9x4rN2i5W8i2qrcPSYfXbgmjM`로 재배포했다. 배포는 `READY`이며 공개 사이트 날짜·투표 숨김·점검 경로의 무인증 차단을 확인했다. 새 비밀값은 Vercel에서 다시 읽을 수 없어 GitHub dispatch 권한의 실제 응답은 아직 확인하지 못했다. 교체 절차는 `docs/daily-refresh-operations.md`에 기록했다.
 
 ## 2026-11-10 당일판 복구와 투표 코너 잠시 닫기
 
